@@ -176,15 +176,123 @@ void ImprimeServicoInvertida(TDescritorS *pLSer){
 //###################ÁREA PARA COLOCAR SUA RESPOSTA - INICIO ######################
 
 
+void CriaListaUnificada(TNoI *pInd, TNoC *pCom, TDescritorS *pServ, TDescritorU *pListaUnica)
+{
+    TNoC *Aux_pCom;
+    TNoI *Aux_pInd;
+    TNoS *Aux_pServ;
+    TNoU *Aux_pUnica;
+
+    Aux_pInd = pInd;
+    Aux_pCom = pCom;
+    Aux_pServ = pServ->Inicio;
+
+    int contador = 0;
+
+    do{
+        //Industria
+        if(Aux_pInd != NULL){
+            Aux_pUnica = (TNoU *) malloc(sizeof(TNoU));
+            Aux_pUnica->Dados = (TCadastroU *) malloc(sizeof(TCadastroU));
+            strcpy(Aux_pUnica->Dados->CNPJ, Aux_pInd->Dados->CNPJ);
+            strcpy(Aux_pUnica->Dados->RazaoSocial, Aux_pInd->Dados->RazaoSocial);
+            strcpy(Aux_pUnica->Dados->Cidade, Aux_pInd->Dados->Cidade);
+            strcpy(Aux_pUnica->Dados->Fone, Aux_pInd->Dados->Fone);
+            Aux_pUnica->Dados->Tipo = 'I';
+            Aux_pUnica->Prox = NULL;
+            Aux_pUnica->Ant = NULL;
+            if(pListaUnica->Inicio == NULL)
+            {
+              pListaUnica->Inicio = Aux_pUnica;
+              pListaUnica->Fim = Aux_pUnica;
+            }
+            else
+            {
+              Aux_pUnica->Ant = pListaUnica->Fim;
+              pListaUnica->Fim->Prox = Aux_pUnica;
+              pListaUnica->Fim = Aux_pUnica;
+            }
+            pListaUnica->Tamanho = pListaUnica->Tamanho + 1;
+            Aux_pInd = Aux_pInd->Prox;
+        }
+        //Comercio
+        if(Aux_pCom->Prox != pCom){
+            Aux_pUnica = (TNoU *) malloc(sizeof(TNoU));
+            Aux_pUnica->Dados = (TCadastroU *) malloc(sizeof(TCadastroU));
+            strcpy(Aux_pUnica->Dados->CNPJ, Aux_pCom->Dados->CNPJ);
+            strcpy(Aux_pUnica->Dados->RazaoSocial, Aux_pCom->Dados->RazaoSocial);
+            strcpy(Aux_pUnica->Dados->Cidade, Aux_pCom->Dados->Cidade);
+            strcpy(Aux_pUnica->Dados->Fone, Aux_pCom->Dados->Fone);
+            Aux_pUnica->Dados->Tipo = 'C';
+            Aux_pUnica->Prox = NULL;
+            Aux_pUnica->Ant = NULL;
+            if(pListaUnica->Inicio == NULL) {
+              pListaUnica->Inicio = Aux_pUnica;
+              pListaUnica->Fim = Aux_pUnica;
+            }
+            else {
+            Aux_pUnica->Ant = pListaUnica->Fim;
+            pListaUnica->Fim->Prox = Aux_pUnica;
+            pListaUnica->Fim = Aux_pUnica;
+            pListaUnica->Tamanho = pListaUnica->Tamanho + 1;
+            Aux_pCom = Aux_pCom->Prox;
+            }
+        }    
+        //Serviço
+        if(Aux_pServ != NULL){
+            Aux_pUnica = (TNoU *) malloc(sizeof(TNoU));
+            Aux_pUnica->Dados = (TCadastroU *) malloc(sizeof(TCadastroU));
+            strcpy(Aux_pUnica->Dados->CNPJ, Aux_pServ->Dados->CNPJ);
+            strcpy(Aux_pUnica->Dados->RazaoSocial, Aux_pServ->Dados->RazaoSocial);
+            strcpy(Aux_pUnica->Dados->Cidade, Aux_pServ->Dados->Cidade);
+            strcpy(Aux_pUnica->Dados->Fone, Aux_pServ->Dados->Fone);
+            Aux_pUnica->Dados->Tipo = 'S';
+            Aux_pUnica->Prox = NULL;
+            Aux_pUnica->Ant = NULL;
+
+            if(pListaUnica->Inicio == NULL)
+            {
+              pListaUnica->Inicio = Aux_pUnica;
+              pListaUnica->Fim = Aux_pUnica;
+            }
+            else
+            {
+              Aux_pUnica->Ant = pListaUnica->Fim;
+              pListaUnica->Fim->Prox = Aux_pUnica;
+              pListaUnica->Fim = Aux_pUnica;
+            }
+            pListaUnica->Tamanho = pListaUnica->Tamanho + 1;
+            Aux_pServ = Aux_pServ->Prox;
+        }   
+        contador++;
+    }while((contador) != i);
+}
+
 
 //###################ÁREA PARA COLOCAR SUA RESPOSTA - FIM ######################
 
 
 //Listar Conteúdo da lista Unificada:
-
+void ImprimeUnificada(TDescritorU *pListaUnica){
+    TNoU *plista = pListaUnica->Inicio;
+    printf("                     LISTA UNIFICADA\n");
+    printf("Tipo    CNPJ            Razao Social                Cidade      Telefone\n");
+    while(plista != NULL) {
+        printf("%c:\t\t%s\t%s\t%s\t%s\n", plista->Dados->Tipo, plista->Dados->CNPJ, plista->Dados->RazaoSocial, plista->Dados->Cidade, plista->Dados->Fone);
+        plista = plista->Prox;
+    }
+}
 
 //Listar Conteúdo da lista Unificada da calda para a cabeça:
-
+void ImprimeUnificadaInvertida(TDescritorU *pListaUnica){
+    TNoU *plista = pListaUnica->Fim;
+    printf("                     LISTA UNIFICADA INVERTIDA\n");
+    printf("Tipo    CNPJ            Razao Social                Cidade      Telefone\n");
+    while(plista != NULL) {
+        printf("%c:\t\t%s\t%s\t%s\t%s\n", plista->Dados->Tipo, plista->Dados->CNPJ, plista->Dados->RazaoSocial, plista->Dados->Cidade, plista->Dados->Fone);
+        plista = plista->Ant;
+    }
+}
 
 //DESALOCAÇÃO DE LISTAS
 
