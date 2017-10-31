@@ -303,6 +303,116 @@ void DesalocaListas(TNoI **pInd, TNoC **pCom, TDescritorS *pServ, TDescritorU *p
 
 
 int main() {
+    int continuar=1;
+//Listas de entrada
+    // Declaração
+    TNoI *LIndustria;
+    TNoC *LComercio;
+    TDescritorS LServico;
+    //Inicialização - listas vazias:
+    LIndustria = NULL;
+    LComercio = NULL;
+    LServico.Fim = NULL;
+    LServico.Inicio = NULL;
+    LServico.Tamanho = 0;
+//Lista Unificada
+    // Declaração
+    TDescritorU LUnica;
+    //Inicialização - lista vazia:
+    LUnica.Fim = NULL;
+    LUnica.Inicio = NULL;
+    LUnica.Tamanho = 0;
+    
+    
+    do
+    {
+        printf("\n\tSecretaria da Fazenda do Distrito Federal");
+        printf("\n\tSistema de Unificacao de Cadastro de Contribuintes\n\n");
+        printf("1. Carregar Dados de Entrada\n");
+        printf("2. Gerar Lista Unificada\n");
+        printf("3. Relatorio: Industrias\n");
+        printf("4. Relatorio: Comercios\n");
+        printf("5. Relatorio: Comercios Invertida\n");
+        printf("6. Relatorio: Servicos\n");
+        printf("7. Relatorio: Servicos Invertida\n");
+        printf("8. Relatorio: Lista Unificada\n");
+        printf("9. Relatorio: Lista Unificada Invertida\n");
+        printf("10. Apagar Listas\n");
+        printf("0. Sair\n");
+        
+        scanf("%d", &continuar);
+        system("clear");
+        
+        switch(continuar)
+        {
+            case 1:
+                if((LIndustria = CriaListaIndustria()))
+                    printf("Lista de Industria montada!\n");
+                else{
+                    printf("Erro na criacao da Lista de Industria!\n");
+                    break;
+                }
+
+                if((LComercio = CriaListaComercio()))
+                    printf("Lista de Comercio montada!\n");
+                else{
+                    printf("Erro na criacao da Lista de Comercio!\n");
+                    break;
+                }
+                
+                if(CriaListaServico(&LServico))
+                    printf("Lista de Servico montada!\n");
+                else{
+                    printf("Erro na criacao da Lista de Servico!\n");
+                }
+                break;
+                
+            case 2:
+//RETIRE O COMENTÁRIO DA LINHA ABAIXO QUANDO IMPLEMENTAR SUA SOLUÇÃO NA ÁREA ACIMA RESERVADA. 
+                CriaListaUnificada(LIndustria, LComercio, &LServico, &LUnica);
+                printf("Lista Unificada montada!\n");
+                break;
+                
+            case 3:
+                ImprimeIndustria(LIndustria);
+                break;
+                
+            case 4:
+                ImprimeComercio(LComercio);
+                break;
+
+            case 5:
+                ImprimeComercioInvertida(LComercio);
+                break;
+                
+            case 6:
+                ImprimeServico(&LServico);
+                break;
+                
+            case 7:
+                ImprimeServicoInvertida(&LServico);
+                break;
+
+            case 8:
+                ImprimeUnificada(&LUnica);
+                break;
+                
+            case 9:
+                ImprimeUnificadaInvertida(&LUnica);
+                break;
+                
+            case 10:
+                DesalocaListas(&LIndustria, &LComercio, &LServico, &LUnica);
+                break;
+                
+            case 0:
+                DesalocaListas(&LIndustria, &LComercio, &LServico, &LUnica);
+                break;
+                
+            default:
+                printf("Digite uma opcao valida\n");
+        }
+    } while(continuar);
     
     return 0;
 }
